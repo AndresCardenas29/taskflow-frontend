@@ -36,7 +36,10 @@ const TablePjRecent: React.FC<TablePjRecentProps> = ({
 			</h3>
 			{data.length > 0 ? (
 				data.map((item, index) => (
-					<div className="project border-t border-gray-300 px-4 py-6 flex items-start justify-between gap-4">
+					<div
+						className="project border-t border-gray-300 px-4 py-6 flex items-start justify-between gap-4"
+						key={index}
+					>
 						<div className="info">
 							<h4 className="text-lg font-semibold">{item.name}</h4>
 							<p className="text-gray-500">{item.description}</p>
