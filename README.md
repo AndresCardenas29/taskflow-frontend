@@ -1,7 +1,3 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
-
 First, run the development server:
 
 ```bash
@@ -16,21 +12,25 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Explicación del Proyecto
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Este proyecto es una aplicación web desarrollada con Next.js, un framework de React para la construcción de aplicaciones web. La aplicación permite gestionar proyectos y tareas, asignar usuarios a proyectos y visualizar el estado de las tareas.
 
-## Learn More
+### Estructura del Proyecto
 
-To learn more about Next.js, take a look at the following resources:
+El proyecto está organizado en varias carpetas y archivos, cada uno con una responsabilidad específica:
+- `src/app`: Contiene las páginas principales de la aplicación.
+- `src/components`: Contiene los componentes reutilizables de la aplicación.
+- `src/styles`: Contiene los archivos de estilos CSS.
+- `public`: Contiene los archivos estáticos como imágenes y fuentes.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Funcionalidades Principales
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Gestión de Proyectos**: La aplicación permite crear, editar y eliminar proyectos. Cada proyecto tiene un nombre, un estado (activo o inactivo) y una lista de usuarios asignados.
 
-## Deploy on Vercel
+2. **Gestión de Tareas**: La aplicación permite crear, editar y eliminar tareas. Cada tarea tiene un título, una descripción, un estado (pendiente, en progreso o completada), una fecha límite y un proyecto al que pertenece.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. **Asignación de Usuarios**: Los usuarios pueden ser asignados a proyectos y tareas. La aplicación permite ver la lista de usuarios asignados a cada proyecto y tarea.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. **Visualización de Tareas**: La aplicación permite ver todas las tareas asignadas a un usuario específico. Las tareas se pueden filtrar por estado y fecha límite.
+
