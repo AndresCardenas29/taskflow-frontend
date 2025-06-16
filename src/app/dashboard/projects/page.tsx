@@ -11,12 +11,12 @@ const Projects = () => {
 		{
 			id: 2,
 			src: "https://i.pravatar.cc/150?img=2",
-			alt: "Avatar 2",
+			alt: "BAvatar 2",
 		},
 		{
 			id: 3,
 			src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face",
-			alt: "Avatar 3",
+			alt: "CAvatar 3",
 		},
 	];
 	return (
@@ -88,19 +88,19 @@ const Projects = () => {
 							<td className="px-4 py-2 border-t border-gray-300">
 								<div className="flex items-center">
 									{avatars.map((avatar, index) => (
-										<img
-											key={avatar.id}
-											src={avatar.src}
-											alt={avatar.alt}
-											className={`w-8 h-8 rounded-full border-2 border-white ${
+										<div
+											key={index}
+											className={`w-8 h-8 rounded-full border-2 border-white bg-blue-500 flex items-center justify-center font-bold text-white text-[1em] ${
 												index > 0 ? "-ml-3" : ""
 											}`}
-										/>
+										>
+											{avatar.alt.charAt(0).toUpperCase()}
+										</div>
 									))}
 								</div>
 							</td>
 							<td className="px-4 py-2 border-t border-gray-300 font-medium text-gray-900">
-								admin usuario
+								nekdress
 							</td>
 						</tr>
 					</tbody>
