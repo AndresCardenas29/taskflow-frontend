@@ -1,14 +1,17 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+import Swal from "sweetalert2";
 
 export default function Home() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const router = useRouter();
 
 	// Aquí podrías manejar el envío del formulario, por ejemplo, enviando los datos a una API
 	const handleSubmit = (e: any) => {
 		e.preventDefault();
-		console.log("Form submitted with:", { email, password });
 		// Aquí podrías hacer una llamada a una API para autenticar al usuario
 		fetch("http://127.0.0.1:4000/auth/login", {
 			method: "POST",
@@ -17,14 +20,25 @@ export default function Home() {
 			},
 			body: JSON.stringify({ email, pass: password }),
 		})
-			.then((response) => response.json())
-			.then((data) => {
-				console.log("Login successful:", data);
-				// Aquí podrías redirigir a otra página o realizar otras acciones
+			.then(async (response) => {
+				let data = await response.json();
+				if (!response.ok) {
+					throw new Error(data.message);
+				}
+				return data; // Devuelve los datos de la respuesta JSON
+			})
+			.then((data: { access_token: string }) => {
+				// guarda el token en el navegador con js-cookie
+				Cookies.set("token", data.access_token, { expires: 1 });
+				// redirige al usuario a la página de dashboard
+				router.push("/dashboard");
 			})
 			.catch((error) => {
-				console.error("Login failed:", error);
-				// Aquí podrías mostrar un mensaje de error al usuario
+				Swal.fire({
+					icon: "error",
+					title: "Oops...",
+					text: "Usuario o contraseña incorrectos!",
+				});
 			});
 	};
 
