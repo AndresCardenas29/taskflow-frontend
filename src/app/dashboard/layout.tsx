@@ -1,17 +1,17 @@
-// components/layout.js
-
-import Head from "next/head";
-import TopBar from "@/components/TopBar";
 import SideBar from "@/components/SideBar";
 import React from "react";
-import { Folder, House, LaptopMinimalCheck, Menu, User } from "lucide-react";
-import Link from "next/link";
+import { Menu } from "lucide-react";
+import { cookies } from "next/headers";
 
 interface LayoutProps {
 	children: React.ReactNode;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC<LayoutProps> = async ({ children }) => {
+	const cookieStore = await cookies();
+	const username =
+		cookieStore.get("username")?.value.charAt(0).toUpperCase() || "T";
+
 	return (
 		<>
 			<nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
@@ -28,11 +28,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 								<span className="sr-only">Open sidebar</span>
 								<Menu />
 							</button>
-							<a href="https://flowbite.com" className="flex ms-2 md:me-24">
+							<a href="https://nekdress.online/" className="flex ms-2 md:me-24">
 								<img
 									src="https://avatars.githubusercontent.com/u/37023028?v=4"
 									className="h-8 me-3 rounded-full"
-									alt="FlowBite Logo"
+									alt="TaskFlow Logo"
 								/>
 								<span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
 									Task Flow
@@ -49,11 +49,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 										data-dropdown-toggle="dropdown-user"
 									>
 										<span className="sr-only">Open user menu</span>
-										<img
-											className="w-8 h-8 rounded-full"
-											src="https://img.freepik.com/foto-gratis/mujer-sonriente-hablando-telefono_23-2149476757.jpg?t=st=1750016887~exp=1750020487~hmac=03029a640eb7f22170d5086bce83d9cc68a49fd6d7fc058bd3e5696b360007ef&w=1060"
-											alt="user photo"
-										/>
+										<div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center font-medium text-2xl text-white">
+											{username}
+										</div>
 									</button>
 								</div>
 								<div
@@ -122,9 +120,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 			<SideBar />
 
 			<div className="p-4 sm:ml-64">
-				<div className="p-4 mt-14">
-					{children}
-				</div>
+				<div className="p-4 mt-14">{children}</div>
 			</div>
 		</>
 	);

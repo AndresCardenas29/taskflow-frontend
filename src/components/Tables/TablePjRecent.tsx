@@ -9,7 +9,7 @@ interface TablePjRecentProps extends React.HTMLAttributes<HTMLDivElement> {
 	data?: {
 		name: string;
 		description: string;
-		date: string;
+		date?: string;
 	}[];
 }
 

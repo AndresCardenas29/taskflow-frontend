@@ -1,35 +1,82 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Cards from "@/components/Cards";
-import Link from "next/link";
-import { ChevronRight } from "lucide-react";
 import TablePjRecent from "@/components/Tables/TablePjRecent";
 
-const dashboard = () => {
-	const tasks = [
-		{
-			name: "Tarea 1",
-			description: "Descripción de la tarea 1",
-			date: "2023-10-01",
-		}
-	];
+type taskapi = {
+	id: number;
+	title: string;
+	description: string;
+	status: string;
+	deadline: string | null;
+	created_at: string;
+	updated_at: string;
+};
 
-	const projects = [
-		{
-			name: "Proyecto 1",
-			description: "Descripción del proyecto 1",
-			date: "2023-10-01",
-		},
-		{
-			name: "Proyecto 2",
-			description: "Descripción de la proyecto 2",
-			date: "2023-10-02",
-		},
-		{
-			name: "proyecto 3",
-			description: "Descripción de la proyecto 3",
-			date: "2023-10-03",
-		},
-	];
+type projectapi = {
+	id: number;
+	name: string;
+	description: string;
+	status: string;
+};
+
+type tableProps = {
+	name: string;
+	description: string;
+	date?: string;
+};
+
+const dashboard = () => {
+	const host = "http://localhost:4000";
+	const [tasks, setTasks] = useState<tableProps[]>([]);
+	const [projects, setProjects] = useState<tableProps[]>([]);
+	
+	useEffect(() => {
+		fetch(`${host}/tasks`)
+			.then(async (response) => {
+				if (!response.ok) {
+					throw new Error("Network response was not ok");
+				}
+				const data = await response.json();
+
+				return await data.data;
+			})
+			.then((data: taskapi[]) => {
+				const dta: tableProps[] = [];
+				for (const item of data) {
+					dta.push({
+						name: item.title,
+						description: item.description,
+						date: item.deadline ? item.deadline : "No deadline",
+					});
+				}
+				setTasks(dta);
+			});
+
+		fetch(`${host}/projects`)
+			.then(async (response) => {
+				if (!response.ok) {
+					throw new Error("Network response was not ok");
+				}
+				const data = await response.json();
+				return await data;
+			})
+			.then((data: projectapi[]) => {
+				const dta: tableProps[] = [];
+				for (const item of data) {
+					dta.push({
+						name: item.name,
+						description: item.description,
+						date: item.status,
+					});
+				}
+				setProjects(data);
+			})
+			.catch((error) => {
+				console.error("Error fetching data:", error);
+			});
+			
+	}, []);
 
 	return (
 		<div>

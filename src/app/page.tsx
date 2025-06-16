@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
+import JWT from "jsonwebtoken";
 
 export default function Home() {
 	const [email, setEmail] = useState("");
@@ -28,6 +29,17 @@ export default function Home() {
 				return data; // Devuelve los datos de la respuesta JSON
 			})
 			.then((data: { access_token: string }) => {
+				const decode: {
+					sub: number;
+					email: string;
+					username: string;
+					iat: number;
+				} = JWT.decode(data.access_token) as any;
+
+				Cookies.set("id", `${decode.sub}`, { expires: 1 });
+				Cookies.set("email", `${decode.email}`, { expires: 1 });
+				Cookies.set("username", `${decode.username}`, { expires: 1 });
+
 				// guarda el token en el navegador con js-cookie
 				Cookies.set("token", data.access_token, { expires: 1 });
 				// redirige al usuario a la página de dashboard

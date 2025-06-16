@@ -1,24 +1,67 @@
+"use client";
 import { Plus, Search } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Cookie from "js-cookie";
+
+interface users {
+	id: number;
+	email: string;
+	username: string;
+	is_active: boolean;
+	role: string;
+	created_at: string;
+	updated_at: string;
+	last_login_at: string;
+}
+
+type projectapi = {
+	id: number;
+	name: string;
+	status: string;
+	assigned_users: users[];
+	created_at: string;
+	updated_at: string;
+};
 
 const Projects = () => {
-	const avatars = [
-		{
-			id: 1,
-			src: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
-			alt: "Avatar 1",
-		},
-		{
-			id: 2,
-			src: "https://i.pravatar.cc/150?img=2",
-			alt: "BAvatar 2",
-		},
-		{
-			id: 3,
-			src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face",
-			alt: "CAvatar 3",
-		},
-	];
+	const host = "http://localhost:4000";
+	const [projects, setProjects] = useState<projectapi[]>([]); // Initialize projects as an empty array
+
+	const getStatus = (status: string) => {
+		switch (status) {
+			case "start":
+				return "Iniciado";
+			case "inactive":
+				return "Inactivo";
+			default:
+				return "Desconocido";
+		}
+	};
+
+	useEffect(() => {
+		const token = Cookie.get("token");
+
+		if (token) {
+			fetch(`${host}/users/projects`, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			})
+				.then(async (response) => {
+					if (!response.ok) {
+						throw new Error("Network response was not ok");
+					}
+					const data = await response.json();
+					return data.data;
+				})
+				.then((data: projectapi[]) => {
+					setProjects(data);
+				})
+				.catch((error) => {
+					console.error("Error fetching projects:", error);
+				});
+		}
+	}, []);
 	return (
 		<div>
 			{/* Header  */}
@@ -64,45 +107,48 @@ const Projects = () => {
 								PROYECTO
 							</th>
 							<th className="bg-gray-100 px-4 py-2 border-t border-gray-300 font-medium">
-								FECHA DE CREACIÓN
+								ESTADO
 							</th>
 							<th className="bg-gray-100 px-4 py-2 border-t border-gray-300 font-medium">
 								MIEMBROS
 							</th>
+							{/* 
 							<th className="bg-gray-100 px-4 py-2 border-t border-gray-300 font-medium">
 								CREADO POR
-							</th>
+							</th> */}
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td className="px-4 py-4 border-t border-gray-300">
-								<h4 className="text-sm font-medium text-gray-900">
-									Proyecto de Ejemplo 1
-								</h4>
-								<p>Descripción del proyecto de ejemplo 1.</p>
-							</td>
-							<td className="px-4 py-2 border-t border-gray-300 text-gray-900">
-								15 jun 2025
-							</td>
-							<td className="px-4 py-2 border-t border-gray-300">
-								<div className="flex items-center">
-									{avatars.map((avatar, index) => (
-										<div
-											key={index}
-											className={`w-8 h-8 rounded-full border-2 border-white bg-blue-500 flex items-center justify-center font-bold text-white text-[1em] ${
-												index > 0 ? "-ml-3" : ""
-											}`}
-										>
-											{avatar.alt.charAt(0).toUpperCase()}
-										</div>
-									))}
-								</div>
-							</td>
-							<td className="px-4 py-2 border-t border-gray-300 font-medium text-gray-900">
-								nekdress
-							</td>
-						</tr>
+						{projects.map((project, index) => (
+							<tr key={index}>
+								<td className="px-4 py-4 border-t border-gray-300">
+									<h4 className="text-sm font-medium text-gray-900">
+										{project.name}
+									</h4>
+								</td>
+								<td className="px-4 py-2 border-t border-gray-300 text-gray-900">
+									{getStatus(project.status)}
+								</td>
+								<td className="px-4 py-2 border-t border-gray-300">
+									<div className="flex items-center">
+										{project.assigned_users.map((user, index) => (
+											<div
+												key={index}
+												className={`w-8 h-8 rounded-full border-2 border-white bg-blue-500 flex items-center justify-center font-bold text-white text-[1em] select-none hover:z-10 ${
+													index > 0 ? "-ml-3" : ""
+												}`}
+											>
+												{user.username.charAt(0).toUpperCase()}
+											</div>
+										))}
+									</div>
+								</td>
+								{/* 
+								<td className="px-4 py-2 border-t border-gray-300 font-medium text-gray-900">
+									nekdress
+								</td> */}
+							</tr>
+						))}
 					</tbody>
 				</table>
 			</div>
